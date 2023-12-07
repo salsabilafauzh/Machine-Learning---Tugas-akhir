@@ -33,3 +33,31 @@ predictions = {}
 for model, classifier in classifiers.items():
     classifier.fit(X_train_tfidf, y_train)
     predictions[model] = classifier.predict(X_test_tfidf)
+    
+# Evaluate the performance of each model
+for model in classifiers:
+    print(f"{model} Accuracy: {accuracy_score(y_test, predictions[model])}")
+    print(f"{model} Classification Report:\n{classification_report(y_test, predictions[model])}")
+    print(f"{model} Confusion Matrix:\n{confusion_matrix(y_test, predictions[model])}\n")
+
+# Visualize Confusion Matrices
+plt.figure(figsize=(12, 10))
+for i, model in enumerate(classifiers, 1):
+    plt.subplot(2, 2, i)
+    cm = confusion_matrix(y_test, predictions[model])
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=['ham', 'spam'], yticklabels=['ham', 'spam'])
+    plt.title(f'{model} Confusion Matrix')
+    plt.xlabel('Predicted')
+    plt.ylabel('True')
+plt.tight_layout()
+plt.show()
+
+# Model Comparison Bar Plot
+accuracies = [accuracy_score(y_test, predictions[model]) for model in classifiers]
+
+plt.figure(figsize=(10, 6))
+plt.bar(classifiers.keys(), accuracies, color=['blue', 'orange', 'green', 'red'])
+plt.ylim([0, 1])
+plt.ylabel('Accuracy')
+plt.title('Model Comparison Tf-Idf')
+plt.show()
