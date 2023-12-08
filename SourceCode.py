@@ -61,3 +61,63 @@ plt.ylim([0, 1])
 plt.ylabel('Accuracy')
 plt.title('Model Comparison Tf-Idf')
 plt.show()
+
+#Preprocesing and training model
+import pandas as pd
+# Load the dataset
+data = pd.read_csv('spam_ham_dataset.csv')
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(data['text'], data['label'], test_size=0.2, random_state=42)
+
+# Vectorize the email text using CountVectorizer
+count_vectorizer = CountVectorizer()
+X_train_count = count_vectorizer.fit_transform(X_train)
+X_test_count = count_vectorizer.transform(X_test)
+
+# Initialize classifiers
+classifiers = {
+    'Naive Bayes': MultinomialNB(),
+    'Logistic Regression': LogisticRegression(max_iter=1000),  # Increase max_iter
+    'Decision Tree': DecisionTreeClassifier(),
+    'SVM': SVC()
+}
+
+# Train and predict using each classifier
+predictions = {}
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=ConvergenceWarning)
+    for model, classifier in classifiers.items():
+        classifier.fit(X_train_count, y_train)
+        predictions[model] = classifier.predict(X_test_count)
+
+        
+#Preprocesing and training model
+
+import pandas as pd
+# Load the dataset
+data = pd.read_csv('spam_ham_dataset.csv')
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(data['text'], data['label'], test_size=0.2, random_state=42)
+
+# Vectorize the email text using CountVectorizer
+count_vectorizer = CountVectorizer()
+X_train_count = count_vectorizer.fit_transform(X_train)
+X_test_count = count_vectorizer.transform(X_test)
+
+# Initialize classifiers
+classifiers = {
+    'Naive Bayes': MultinomialNB(),
+    'Logistic Regression': LogisticRegression(max_iter=1000),  # Increase max_iter
+    'Decision Tree': DecisionTreeClassifier(),
+    'SVM': SVC()
+}
+
+# Train and predict using each classifier
+predictions = {}
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=ConvergenceWarning)
+    for model, classifier in classifiers.items():
+        classifier.fit(X_train_count, y_train)
+        predictions[model] = classifier.predict(X_test_count)
